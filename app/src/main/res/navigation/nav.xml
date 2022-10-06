@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="by.asw.craft.ui.main.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_page2"
+            app:destination="@id/page2" />
+        <action
+            android:id="@+id/action_mainFragment_to_map"
+            app:destination="@id/map" />
+    </fragment>
+    <fragment
+        android:id="@+id/page2"
+        android:name="by.asw.craft.ui.main.Page2"
+        android:label="fragment_page2"
+        tools:layout="@layout/fragment_page2" >
+        <action
+            android:id="@+id/action_page2_to_map"
+            app:destination="@id/map" />
+        <action
+            android:id="@+id/action_page2_to_assortment"
+            app:destination="@id/assortment" />
+    </fragment>
+    <fragment
+        android:id="@+id/map"
+        android:name="by.asw.craft.Map"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/assortment"
+        android:name="by.asw.craft.ui.main.Assortment"
+        android:label="fragment_assortment"
+        tools:layout="@layout/fragment_assortment" />
+</navigation>
