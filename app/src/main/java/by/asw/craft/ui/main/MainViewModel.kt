@@ -22,11 +22,12 @@ class MainViewModel : ViewModel() {
 
     fun getButtonData() :List<DataModel> {
         val options = mutableListOf<DataModel>()
-        options.add(DataModel("Выпечка", R.drawable.battle, "#09A9FF"))
-        options.add(DataModel("Молочные продукты", R.drawable.beer, "#3E51B1"))
-        options.add(DataModel("Мясо и мясные изделия", R.drawable.ferrari, "#673BB7"))
-        options.add(DataModel("Item 4", R.drawable.jetpack_joyride, "#4BAA50"))
-        options.add(DataModel("Item 5", R.drawable.three_d, "#F94336"))
+        options.add(DataModel("Хлеб и выпечка", R.drawable.bread, "#fca43c", 1))
+        options.add(DataModel("Молочные продукты", R.drawable.milk, "#3a7edb",2 ))
+        options.add(DataModel("Рыба", R.drawable.fish, "#21bfcd", 3))
+        options.add(DataModel("Мясо", R.drawable.meat, "#f53d3d", 4))
+        options.add(DataModel("Мед", R.drawable.honey, "#fdf750", 5))
+        options.add(DataModel("Овощи и фрукты", R.drawable.vegetables, "#55e76a", 6))
         return options
     }
 

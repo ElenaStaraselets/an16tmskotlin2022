@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import by.asw.craft.AutoFitGridLayoutManager
 import by.asw.craft.DataModel
@@ -37,16 +38,8 @@ class MainFragment : Fragment() , RecyclerViewAdapter.ItemListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
 
-       // recyclerView = findViewById(R.id.recyclerView) as RecyclerView?
-//        arrayList = ArrayList<DataModel>()
-//        arrayList!!.add(DataModel("Item 1", R.drawable.battle, "#09A9FF"))
-//        arrayList!!.add(DataModel("Item 2", R.drawable.beer, "#3E51B1"))
-//        arrayList!!.add(DataModel("Item 3", R.drawable.ferrari, "#673BB7"))
-//        arrayList!!.add(DataModel("Item 4", R.drawable.jetpack_joyride, "#4BAA50"))
-//        arrayList!!.add(DataModel("Item 5", R.drawable.three_d, "#F94336"))
-//        arrayList!!.add(DataModel("Item 6", R.drawable.terraria, "#0A9B88"))
+
         val adapter = RecyclerViewAdapter( context, viewModel.date, this)
         recyclerView.setAdapter(adapter)
         /**
@@ -57,6 +50,9 @@ class MainFragment : Fragment() , RecyclerViewAdapter.ItemListener {
     }
 
     override fun onItemClick(item: DataModel?) {
+        if(item!== null)
+            this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToSellers(item))
+
         Toast.makeText(
             getContext(),
             item?.text.toString() + " is clicked",
