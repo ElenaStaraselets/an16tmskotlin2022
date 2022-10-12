@@ -1,15 +1,25 @@
 package by.asw.craft.sellers
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.asw.craft.R
 import by.asw.craft.databinding.FragmentPage2Binding
-import by.asw.craft.network.CommonCraftApiFilter
-import by.asw.craft.ui.main.PhotoGridAdapter
+import by.asw.craft.db.SearchRequest
+import by.asw.craft.db.SearchRequestDatabase
+import by.asw.craft.main.MainFragmentDirections
+import by.asw.craft.main.PhotoGridAdapter
+import kotlinx.android.synthetic.main.activity_notes.*
+import kotlinx.coroutines.launch
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,71 +32,16 @@ import by.asw.craft.ui.main.PhotoGridAdapter
  * create an instance of this fragment.
  */
 class SellersFragment : Fragment() {
-    /*
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_page2, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Page2.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Sellers().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
-     */
-    /**
-     * Lazily initialize our [SellersViewModel].
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val application = requireNotNull(activity).application
-        val binding = FragmentPage2Binding.inflate(inflater)
-        binding.lifecycleOwner = this
-        val catalogueTypes = SellersFragmentArgs.fromBundle(arguments!!).catalogueType
-        val viewModelFactory = SellersViewModelFactory(catalogueTypes, application)
-        binding.viewModel = ViewModelProvider( this, viewModelFactory).get(SellersViewModel::class.java)
-        return binding.root
-    }
-
-    */
 
 
+//    private lateinit var adapter: NotesRVAdapter
+    private val noteDatabase by lazy { SearchRequestDatabase.getDatabase( getContext()).searchRequestDao() }
 
     /**
-     * Lazily initialize our [OverviewViewModel].
-     */
-    private val viewModel: SellersViewModel by lazy {
-        ViewModelProvider(this).get(SellersViewModel::class.java)
+   * Lazily initialize our [OverviewViewModel].
+   */
+    private val viewModel: CommonViewModel by lazy {
+        ViewModelProvider(this).get(CommonViewModel::class.java)
     }
 
     /**
@@ -100,10 +55,6 @@ class SellersFragment : Fragment() {
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         binding.lifecycleOwner = this
 
-//        // Giving the binding access to the OverviewViewModel
-//        binding.viewModel = viewModel
-
-
         val application = requireNotNull(activity).application
         val catalogueTypes = SellersFragmentArgs.fromBundle(arguments!!).catalogueType
 
@@ -112,14 +63,8 @@ class SellersFragment : Fragment() {
         })
 
         val viewModelFactory = SellersViewModelFactory(catalogueTypes, application)
-        binding.viewModel = ViewModelProvider( this, viewModelFactory).get(SellersViewModel::class.java)
-//        return binding.root
+        binding.viewModel = ViewModelProvider( this, viewModelFactory).get(CommonViewModel::class.java)
 
-        // Sets the adapter of the photosGrid RecyclerView with clickHandler lambda that
-        // tells the viewModel when our property is clicked
-//        binding.photosGrid.adapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener {
-//            viewModel.displayPropertyDetails(it)
-//        })
 
         // Observe the navigateToSelectedProperty LiveData and Navigate when it isn't null
         // After navigating, call displayPropertyDetailsComplete() so that the ViewModel is ready
@@ -127,7 +72,7 @@ class SellersFragment : Fragment() {
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
             if ( null != it ) {
                 // Must find the NavController from the Fragment
-//                this.findNavController().navigate(SellersFragmentDirections.actionPage2ToAssortment(it))
+                this.findNavController().navigate(SellersFragmentDirections.actionPage2ToAssortment(it))
                 // Tell the ViewModel we've made the navigate call to prevent multiple navigation
                 viewModel.displayPropertyDetailsComplete()
             }
@@ -150,13 +95,28 @@ class SellersFragment : Fragment() {
      * overflow menu.
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        viewModel.updateFilter(
-            when (item.itemId) {
-                R.id.show_rent_menu -> CommonCraftApiFilter.SHOW_RENT
-                R.id.show_buy_menu -> CommonCraftApiFilter.SHOW_BUY
-                else -> CommonCraftApiFilter.SHOW_ALL
+        when (item.itemId) {
+            R.id.offers_search_menu -> {
+                val intent = Intent(context, SearchDialog::class.java)
+                newSearchRequestLauncher.launch(intent)
             }
-        )
+            R.id.offers_search_menu_history -> {
+                this.findNavController().navigate(SellersFragmentDirections.actionViewSearchHistory(viewModel.currentCatalog))
+            }
+            else -> {}
+        }
         return true
     }
+
+    private val newSearchRequestLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val searchText = result.data?.getStringExtra("search_text")
+                // Add the new note at the top of the list
+                val newNote = SearchRequest(Date(), searchText ?: "")
+                lifecycleScope.launch {
+                    noteDatabase.addRecord(newNote)
+                }
+            }
+        }
 }

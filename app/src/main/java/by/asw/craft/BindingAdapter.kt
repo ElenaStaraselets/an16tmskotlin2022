@@ -2,22 +2,27 @@ package by.asw.craft
 
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import by.asw.craft.db.SearchRequest
 import by.asw.craft.network.CatalogItem
 import by.asw.craft.sellers.ImageLoadedStatus
-import by.asw.craft.ui.main.PhotoGridAdapter
+import by.asw.craft.main.PhotoGridAdapter
+import by.asw.craft.sellers.SearchListAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-/**
- * When there is no Mars property data (data is null), hide the [RecyclerView], otherwise show it.
- */
+
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<CatalogItem>?) {
     val adapter = recyclerView.adapter as PhotoGridAdapter
+    adapter.submitList(data)
+}
+
+@BindingAdapter("listsSearchHistory")
+fun bindSearchRecyclerView(recyclerView: RecyclerView, data: List<SearchRequest>?) {
+    val adapter = recyclerView.adapter as SearchListAdapter
     adapter.submitList(data)
 }
 

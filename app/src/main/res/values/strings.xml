@@ -1,6 +1,14 @@
 <resources>
-    <string name="app_name">craft</string>
+    <string name="app_name">Folc Craft</string>
     <string name="show_all">Show all</string>
+    <string name="offers_search">Поиск</string>
+    <string name="offers_search_history">История поиска</string>
+
+
+    <string name="execute">Найти</string>
+    <string name="viewOnMap">Map</string>
+    <string name="repeate">Повторить</string>
+
     <string name="show_rent">Rent</string>
     <string name="show_buy">Buy</string>
     <string name="type_rent">Rent</string>

@@ -1,4 +1,4 @@
-package by.asw.craft.ui.main
+package by.asw.craft.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

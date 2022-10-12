@@ -1,4 +1,4 @@
-package by.asw.craft.ui.main
+package by.asw.craft.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -7,16 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import by.asw.craft.AutoFitGridLayoutManager
 import by.asw.craft.DataModel
 import by.asw.craft.R
 import by.asw.craft.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
-import java.util.ArrayList
 
 class MainFragment : Fragment() , RecyclerViewAdapter.ItemListener {
 

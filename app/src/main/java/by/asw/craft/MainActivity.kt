@@ -2,10 +2,8 @@ package by.asw.craft
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import by.asw.craft.ui.main.MainFragment
+import by.asw.craft.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
     //private lateinit var navController: NavController

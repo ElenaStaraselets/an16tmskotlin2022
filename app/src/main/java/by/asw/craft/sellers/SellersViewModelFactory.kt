@@ -13,8 +13,8 @@ class SellersViewModelFactory(
         private val application: Application) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SellersViewModel::class.java)) {
-            return SellersViewModel(catalorType, application) as T
+        if (modelClass.isAssignableFrom(CommonViewModel::class.java)) {
+            return CommonViewModel(catalorType, application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

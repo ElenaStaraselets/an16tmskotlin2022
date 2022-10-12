@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="by.asw.craft.ui.main.MainFragment"
+        android:name="by.asw.craft.main.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -30,17 +30,47 @@
             android:id="@+id/action_page2_to_map"
             app:destination="@id/map" />
         <action
+            android:id="@+id/action_view_search_history"
+            app:destination="@id/searchhistory" />
+        <action
             android:id="@+id/action_page2_to_assortment"
             app:destination="@id/assortment" />
     </fragment>
     <fragment
         android:id="@+id/map"
-        android:name="by.asw.craft.Map"
+        android:name="by.asw.craft.map.MapFragment"
         android:label="fragment_map"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map">
+        <argument
+            android:name="selectedItem"
+            app:argType="by.asw.craft.network.CatalogItem"
+            />
+    </fragment>
+
+<fragment
+        android:id="@+id/searchhistory"
+        android:name="by.asw.craft.sellers.SearchHistoryFragment"
+        android:label="fragment_search_history"
+        tools:layout="@layout/fragment_search_history" >
+        <argument
+            android:name="catalogueType"
+            app:argType="by.asw.craft.DataModel"
+            />
+    </fragment>
+
     <fragment
         android:id="@+id/assortment"
-        android:name="by.asw.craft.ui.main.Assortment"
-        android:label="fragment_assortment"
-        tools:layout="@layout/fragment_assortment" />
+        android:name="by.asw.craft.assortment.Assortment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_assortment">
+        <argument
+            android:name="selectedItem"
+            app:argType="by.asw.craft.network.CatalogItem"
+            />
+
+        <action
+            android:id="@+id/action_assortment_to_map"
+            app:destination="@id/map" />
+
+    </fragment>
 </navigation>
